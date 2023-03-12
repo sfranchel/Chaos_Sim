@@ -14,6 +14,7 @@ class chaotic_system:
 
     # Get Methods
     def get_t_collisions(self): return self.__t_coll
+    def get_phi_collisions(self): return self.__phi_coll
     def get_ball_x(self): return self.__ball.get_x()
     def get_platform_x(self): return self.__platform.get_x()
 
@@ -22,7 +23,9 @@ class chaotic_system:
     def set_platform_w(self,w): self.__platform.set_w(w)
     def reset_ball(self,x0,v0): self.__ball.reset(x0,v0)
     def reset_platform(self,A=None,w=None): self.__platform.reset(A,w)
-    def reset(self): self.__t_coll=[]
+    def reset(self):
+        self.__t_coll=[]
+        self.__phi_coll=[]
 
     def evolve(self,dt):
 
@@ -48,6 +51,7 @@ class chaotic_system:
             else:
                 self.__ball_is_stuck=True
                 _ball.reset(_platform.get_x(), _platform.get_v())
+                self.__last_T = (2*np.pi-_platform.get_phi())/_platform.get_w()
 
     def collide(self, dt, b, p):
         # Step back
@@ -57,6 +61,7 @@ class chaotic_system:
         # Find time of interaction
         try:
             t_int = Newton_solver(dt, b.get_x0(), b.get_v0(), b.get_t(), p.get_A(), p.get_w(), p.get_phi())
+            #t_int = Bisection_solver( dt, b.get_x(), b.get_v(), p.get_A(), p.get_w(), p.get_phi())
         except:
             print('WARNING: Newton_solver failed, fallig back to Bisection_solver')
             t_int = Bisection_solver( dt, b.get_x(), b.get_v(), p.get_A(), p.get_w(), p.get_phi())
@@ -64,11 +69,14 @@ class chaotic_system:
         # evolve to the interaction time
         b.evolve(t_int)
         p.evolve(t_int)
-        self.__t_coll.append(b.get_t())
+        self.__t_coll.append(b.get_t()*p.get_w()/(2*np.pi))
+        self.__phi_coll.append((b.get_t()-self.__last_T)*p.get_w()/(2*np.pi))
+        self.__last_T = (2*np.pi-p.get_phi())/p.get_w()
+        #self.__last_T = (p.get_phi())/p.get_w()
 
-        # change ball direction ball
+        # change ball direction
         b.reset(b.get_x(),-self.__mu*(b.get_v() - p.get_v()) + p.get_v())
 
-        # finish evoloutuon
+        # finish evoloution
         b.evolve(dt-t_int)
         p.evolve(dt-t_int)

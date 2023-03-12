@@ -1,4 +1,4 @@
-from numpy import cos,sin
+from numpy import cos,sin,pi
 
 class platform:
     '''
@@ -41,3 +41,7 @@ class platform:
         self.__px = self.__A+self.__A*cos(self.__w*dt + self.__phi)
         self.__vx = -self.__A*self.__w*sin(self.__w*dt + self.__phi)
         self.__phi+=dt*self.__w
+
+        # check that the phase goes back to 0
+        while self.__phi >= 2*pi:
+            self.__phi -= 2*pi

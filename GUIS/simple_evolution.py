@@ -29,28 +29,28 @@ output = widgets.Output(layout=Layout(height='auto', width='auto'))
 def plot_evolution_static(x0,v0,A,w,mu,dt,n_dt,scale=[1000,'mm']):
     # Initialize the system 
     c=CS.chaotic_system(x0,v0,A,w,mu)
-    
+  
     # Initialize arrays
     xcb = [c.get_ball_x()*scale[0]]
     xcp = [c.get_platform_x()*scale[0]]
     t = [0]
-    
+
     # Run the simulation
     for i in range(n_dt):
         c.evolve(dt)
         t.append(t[i]+dt)
         xcb.append(c.get_ball_x()*scale[0])
         xcp.append(c.get_platform_x()*scale[0])
-    
+
     # Plot the results
-    fig, ax = plt.subplots(1,1,figsize=((GRID_WIDTH*1)/100*(2./3),(GRID_HEIGHT*1)/100), )
+    fig, ax = plt.subplots(1,1,figsize=((GRID_WIDTH)/100*(2./3),(GRID_HEIGHT)/100), )
     ax.plot(t,xcb, label='Ball')
     ax.plot(t,xcp, label='Platform')
     ax.set_title('Simulation')
     ax.legend()
     ax.set_xlabel('time [s]')
     ax.set_ylabel(f'displacement [{scale[1]}]')
-    
+
     return fig.canvas
 
 

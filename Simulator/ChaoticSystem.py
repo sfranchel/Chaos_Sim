@@ -9,10 +9,14 @@ class ChaoticSystem:
         self.ball = Ball(x0,v0)
         self.platform = Platform(A0, w0)
         self.mu = mu
-        self.t_coll = []
-        self.phi_coll = []
+
         self.last_T = 0
         self.ball_is_stuck=False
+
+        # Collections of output observables
+        self.t_coll = []
+        self.phi_coll = []
+        self.I_coll = []
 
     # Get Methods
     def get_ball_x(self): return self.ball.pos
@@ -62,7 +66,9 @@ class ChaoticSystem:
         self.last_T = (2*pi - p.phi)/p.w
 
         # change ball direction
+        v_in = b.vel
         b.reset(b.pos,-self.mu*(b.vel - p.vel) + p.vel)
+        self.I_coll.append(v_in - b.vel)
 
         # finish evoloution
         b.evolve(-t_int)

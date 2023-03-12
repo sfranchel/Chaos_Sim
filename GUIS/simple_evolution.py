@@ -28,7 +28,7 @@ output = widgets.Output(layout=Layout(height='auto', width='auto'))
 
 def plot_evolution_static(x0,v0,A,w,mu,dt,n_dt,scale=[1000,'mm']):
     # Initialize the system 
-    c=CS.chaotic_system(x0,v0,A,w,mu)
+    c=CS.ChaoticSystem(x0,v0,A,w,mu)
   
     # Initialize arrays
     xcb = [c.get_ball_x()*scale[0]]

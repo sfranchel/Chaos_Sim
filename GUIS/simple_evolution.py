@@ -8,7 +8,7 @@ plt.ioff()
 
 #Define the Grid
 GRID_HEIGHT=500.
-GRID_WIDTH=1000.
+GRID_WIDTH=950.
 
 # Physical system parameters
 b_v0 = widgets.FloatText(value=0.12,step=1e-2, description='Ball v0:', layout=Layout(height='auto', width='auto'))

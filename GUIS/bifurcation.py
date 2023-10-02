@@ -11,11 +11,11 @@ GRID_HEIGHT=500.
 GRID_WIDTH=950.
 
 # Physical system parameters
-b_v0 = widgets.FloatText(value=0.12,step=1e-2, description='Ball v0:', layout=Layout(height='auto', width='auto'))
-b_x0 = widgets.FloatText(value=0.0012,step=1e-4, description='Ball x0:', layout=Layout(height='auto', width='auto'))
-b_w0 = widgets.FloatText(value=200, description='Platform w:', layout=Layout(height='auto', width='auto'))
-b_mu = widgets.FloatSlider(value=0.5, min=0, max=1, step=0.01, description='Bounciness:',layout=Layout(height='auto', width='auto'))
-b_A_range = widgets.FloatRangeSlider(value = [0.28, 0.55], step=0.01, min=0, max=1, description='A range:', layout=Layout(height='auto', width='auto'))
+b_v0 = widgets.FloatText(value=0.12,step=1e-2, description='Ball v0 [m/s]', layout=Layout(height='auto', width='auto'))
+b_x0 = widgets.FloatText(value=1.2,step=1e-1, description='Ball x0 [mm]', layout=Layout(height='auto', width='auto'))
+b_f0 = widgets.FloatText(value=30,step=1e-2, description='Freq. [1/s]', layout=Layout(height='auto', width='auto'))
+b_mu = widgets.FloatSlider(value=0.7, min=0, max=1, step=0.01, description='Res. factor',layout=Layout(height='auto', width='auto'))
+b_A_range = widgets.FloatRangeSlider(value = [0.280, 0.550], step=0.001, min=0, max=1, description='A range [mm]', layout=Layout(height='auto', width='auto'))
 
 
 # Simulation parameters
@@ -42,7 +42,7 @@ def simulate_bifurcation(x0,v0,w,mu,A_range,n_A, dt,n_dt, pbar):
     # Loop over the amplitudes
     for A in np.linspace(A_range[0],A_range[1],n_A):
         pbar.value=A
-        c.set_platform_A(A*1e-3)
+        c.set_platform_A(A)
         c.reset()
 
         for i in range(n_dt):
@@ -56,7 +56,7 @@ def simulate_bifurcation(x0,v0,w,mu,A_range,n_A, dt,n_dt, pbar):
     fig, ax = plt.subplots(1,1,figsize=((GRID_WIDTH)/100*(2./3),(GRID_HEIGHT)/100*(7./9)), )
 
     for i in range(len(phi_arr)): 
-        ax.scatter(A_arr[i],phi_arr[i],c='k',s=0.1)
+        ax.scatter(np.array(A_arr[i])*1e3,phi_arr[i],c='k',s=0.1)
 
     ax.set_title('Simulation of Phase Bifurcation')
     ax.set_ylabel('phase [periods]')
@@ -69,11 +69,12 @@ def simulate_bifurcation(x0,v0,w,mu,A_range,n_A, dt,n_dt, pbar):
 def on_button_clicked(b):
     with output:
         output.clear_output()
-        display(simulate_bifurcation(b_x0.value,
+        display(simulate_bifurcation(
+                              b_x0.value*1e-3,
                               b_v0.value,
-                              b_w0.value,
+                              b_f0.value*2*np.pi,
                               b_mu.value,
-                              b_A_range.value,
+                              [x*1e-3 for x in  b_A_range.value],
                               b_n_A.value,
                               b_dt.value,
                               b_n_dt.value,
@@ -89,7 +90,7 @@ GUI = GridspecLayout(9,3, height=f'{GRID_HEIGHT}px', width=f'{GRID_WIDTH}px',ali
 GUI[0,0]= b_run
 GUI[1,0]= b_x0
 GUI[2,0]= b_v0
-GUI[3,0]= b_w0
+GUI[3,0]= b_f0
 GUI[4,0]= b_mu
 GUI[5,0]= b_A_range
 GUI[6,0]= b_n_A

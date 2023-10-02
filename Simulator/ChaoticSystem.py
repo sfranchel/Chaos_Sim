@@ -46,7 +46,7 @@ class ChaoticSystem:
 
         # check if ball has interacted with platform
         if ball.pos <= platform.pos:
-            if abs(ball.vel - platform.vel) > 0.01 and not self.ball_is_stuck: 
+            if abs(ball.vel - platform.vel) > 0.001 and not self.ball_is_stuck: 
                 self.collide(dt, ball, platform)
             else:
                 self.ball_is_stuck=True
@@ -62,7 +62,7 @@ class ChaoticSystem:
         b.evolve(t_int)
         p.evolve(t_int)
         self.t_coll.append(b.t* (p.w/(2*pi))) # Time in units of Periods
-        self.phi_coll.append((b.t -self.last_T)*p.w/(2*pi)) # Difference of Phase
+        self.phi_coll.append(abs((b.t -self.last_T)*p.w/(2*pi))) # Difference of Phase
         self.last_T = (2*pi - p.phi)/p.w
 
         # change ball direction

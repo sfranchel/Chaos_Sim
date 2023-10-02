@@ -1,7 +1,7 @@
 from ipywidgets import GridspecLayout, widgets, Layout
 import matplotlib.pyplot as plt
 import Simulator.ChaoticSystem as CS
-#import numpy as np
+from numpy import pi
 
 #Disable inline plots
 plt.ioff()
@@ -11,10 +11,10 @@ GRID_HEIGHT=500.
 GRID_WIDTH=950.
 
 # Physical system parameters
-b_v0 = widgets.FloatText(value=0.12,step=1e-2, description='Ball v0:', layout=Layout(height='auto', width='auto'))
-b_x0 = widgets.FloatText(value=0.0012,step=1e-4, description='Ball x0:', layout=Layout(height='auto', width='auto'))
-b_A0 = widgets.FloatText(value=0.00041,step=1e-5, description='Platform A:', layout=Layout(height='auto', width='auto'))
-b_w0 = widgets.FloatText(value=200, description='Platform w:', layout=Layout(height='auto', width='auto'))
+b_v0 = widgets.FloatText(value=0.12,step=1e-2, description='Ball v0 [m/s]', layout=Layout(height='auto', width='auto'))
+b_x0 = widgets.FloatText(value=1.2,step=1e-1, description='Ball x0 [mm]', layout=Layout(height='auto', width='auto'))
+b_A0 = widgets.FloatText(value=0.41,step=1e-2, description='Ampl. [mm]', layout=Layout(height='auto', width='auto'))
+b_w0 = widgets.FloatText(value=30, description='Freq. [1/s]', layout=Layout(height='auto', width='auto'))
 b_mu = widgets.FloatSlider(value=0.5, min=0, max=1, step=0.01, description='Bounciness:',layout=Layout(height='auto', width='auto'))
 
 # Simulation parameters
@@ -52,10 +52,11 @@ def plot_evolution_static(x0,v0,A,w,mu,dt,n_dt):
 def on_button_clicked(b):
     with output:
         output.clear_output()
-        display(plot_evolution_static(b_x0.value,
+        display(plot_evolution_static(
+                              b_x0.value*1e-3,
                               b_v0.value,
-                              b_A0.value,
-                              b_w0.value,
+                              b_A0.value*1e-3,
+                              b_w0.value*2*pi,
                               b_mu.value,
                               b_dt.value,
                               b_n_dt.value,

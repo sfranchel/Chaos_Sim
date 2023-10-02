@@ -1,7 +1,7 @@
-from ipywidgets import GridspecLayout, widgets, Layout
 import matplotlib.pyplot as plt
 import Simulator.ChaoticSystem as CS
-#import numpy as np
+from ipywidgets import GridspecLayout, widgets, Layout
+from numpy import pi 
 
 #Disable inline plots
 plt.ioff()
@@ -11,15 +11,15 @@ GRID_HEIGHT=500.
 GRID_WIDTH=950.
 
 # Physical system parameters
-b_v0 = widgets.FloatText(value=0.12,step=1e-2, description='Ball v0:', layout=Layout(height='auto', width='auto'))
-b_x0 = widgets.FloatText(value=0.0012,step=1e-4, description='Ball x0:', layout=Layout(height='auto', width='auto'))
-b_A0 = widgets.FloatText(value=0.00041,step=1e-5, description='Platform A:', layout=Layout(height='auto', width='auto'))
-b_w0 = widgets.FloatText(value=200, description='Platform w:', layout=Layout(height='auto', width='auto'))
-b_mu = widgets.FloatSlider(value=0.5, min=0, max=1, step=0.01, description='Bounciness:',layout=Layout(height='auto', width='auto'))
+b_v0 = widgets.FloatText(value=0.12,step=1e-2, description='Ball v0 [m/s]', layout=Layout(height='auto', width='auto'))
+b_x0 = widgets.FloatText(value=1.2,step=1e-1, description='Ball x0 [mm]', layout=Layout(height='auto', width='auto'))
+b_A0 = widgets.FloatText(value=0.41,step=1e-2, description='Ampl. [mm]', layout=Layout(height='auto', width='auto'))
+b_f0 = widgets.FloatText(value=30,step=1e-2, description='Freq. [1/s]', layout=Layout(height='auto', width='auto'))
+b_mu = widgets.FloatSlider(value=0.7, min=0, max=1, step=0.01, description='Res. factor',layout=Layout(height='auto', width='auto'))
 
 # Simulation parameters
-b_dt = widgets.FloatLogSlider(value=1e-4, base=10,step=0.2,min=-6, max=-2, description='dt:',layout=Layout(height='auto', width='auto'))
-b_n_dt = widgets.IntSlider(value=10000, min=1, max=3e4, description='Steps:',layout=Layout(height='auto', width='auto'))
+b_dt = widgets.FloatLogSlider(value=1e-4, base=10,step=0.2,min=-6, max=-2, description='dt [s]',layout=Layout(height='auto', width='auto'))
+b_n_dt = widgets.IntSlider(value=10000, min=1, max=3e4, description='Steps',layout=Layout(height='auto', width='auto'))
 
 # Run button and output window
 b_run = widgets.Button(description='Run', layout=Layout(height='auto', width='auto'))
@@ -58,10 +58,11 @@ def plot_evolution_static(x0,v0,A,w,mu,dt,n_dt,scale=[1000,'mm']):
 def on_button_clicked(b):
     with output:
         output.clear_output()
-        display(plot_evolution_static(b_x0.value,
-                              b_v0.value,
-                              b_A0.value,
-                              b_w0.value,
+        display(plot_evolution_static(
+                              b_x0.value*1e-3, # mm
+                              b_v0.value,      # m/s
+                              b_A0.value*1e-3, # mm
+                              b_f0.value*2*pi, # 1/s
                               b_mu.value,
                               b_dt.value,
                               b_n_dt.value,
@@ -77,7 +78,7 @@ GUI[0,0]= b_run
 GUI[1,0]= b_x0
 GUI[2,0]= b_v0
 GUI[3,0]= b_A0
-GUI[4,0]= b_w0
+GUI[4,0]= b_f0
 GUI[5,0]= b_mu
 GUI[6,0]= b_dt
 GUI[7,0]= b_n_dt

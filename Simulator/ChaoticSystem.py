@@ -46,7 +46,7 @@ class ChaoticSystem:
 
         # check if ball has interacted with platform
         if ball.pos <= platform.pos:
-            if abs(ball.vel - platform.vel) > 0.001 and not self.ball_is_stuck: 
+            if platform.vel - ball.vel > 2*9.8*dt and not self.ball_is_stuck: 
                 self.collide(dt, ball, platform)
             else:
                 self.ball_is_stuck=True

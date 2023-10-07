@@ -19,7 +19,7 @@ def Bisection_solver(dt, x0,v0, A0,w0,phi0, tol=1e-4,max_iter=100):
     tmin=-dt
     n_iter=0
 
-    while (tmax - tmin)*0.5 > tol*dt and max_iter:
+    while (tmax - tmin)*0.5 > tol*dt and  n_iter<max_iter:
         n_iter+=1
 
         tavg = (tmin + tmax)*0.5
@@ -33,5 +33,6 @@ def Bisection_solver(dt, x0,v0, A0,w0,phi0, tol=1e-4,max_iter=100):
         # else f(t0)=0 is in the other half of the interval, set tmin -> tavg
         else:
             tmin = tavg
-
+    if n_iter >= max_iter:
+        print("Warning: Solver reached max iter, something might be going wrong")
     return (tmin + tmax) / 2

@@ -14,8 +14,8 @@ GRID_WIDTH=950.
 b_v0 = widgets.FloatText(value=0.12,step=1e-2, description='Ball v0 [m/s]', layout=Layout(height='auto', width='auto'))
 b_x0 = widgets.FloatText(value=1.2,step=1e-1, description='Ball x0 [mm]', layout=Layout(height='auto', width='auto'))
 b_A0 = widgets.FloatText(value=0.41,step=1e-2, description='Ampl. [mm]', layout=Layout(height='auto', width='auto'))
-b_f0 = widgets.FloatText(value=30,step=1e-2, description='Freq. [1/s]', layout=Layout(height='auto', width='auto'))
-b_mu = widgets.FloatSlider(value=0.7, min=0, max=1, step=0.01, description='Res. factor',layout=Layout(height='auto', width='auto'))
+b_f0 = widgets.FloatText(value=30,step=1e-1, description='Freq. [1/s]', layout=Layout(height='auto', width='auto'))
+b_mu = widgets.FloatSlider(value=0.5, min=0, max=1, step=0.01, description='Res. factor',layout=Layout(height='auto', width='auto'))
 
 # Simulation parameters
 b_dt = widgets.FloatLogSlider(value=1e-4, base=10,step=0.2,min=-6, max=-2, description='dt [s]',layout=Layout(height='auto', width='auto'))

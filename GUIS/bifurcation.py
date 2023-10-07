@@ -13,9 +13,9 @@ GRID_WIDTH=950.
 # Physical system parameters
 b_v0 = widgets.FloatText(value=0.12,step=1e-2, description='Ball v0 [m/s]', layout=Layout(height='auto', width='auto'))
 b_x0 = widgets.FloatText(value=1.2,step=1e-1, description='Ball x0 [mm]', layout=Layout(height='auto', width='auto'))
-b_f0 = widgets.FloatText(value=30,step=1e-2, description='Freq. [1/s]', layout=Layout(height='auto', width='auto'))
-b_mu = widgets.FloatSlider(value=0.7, min=0, max=1, step=0.01, description='Res. factor',layout=Layout(height='auto', width='auto'))
-b_A_range = widgets.FloatRangeSlider(value = [0.280, 0.550], step=0.001, min=0, max=1, description='A range [mm]', layout=Layout(height='auto', width='auto'))
+b_f0 = widgets.FloatText(value=30,step=1e-1, description='Freq. [1/s]', layout=Layout(height='auto', width='auto'))
+b_mu = widgets.FloatSlider(value=0.5, min=0, max=1, step=0.01, description='Res. factor',layout=Layout(height='auto', width='auto'))
+b_A_range = widgets.FloatRangeSlider(value = [0.380, 0.551], step=0.001, min=0.2, max=1.0, description='A range [mm]', layout=Layout(height='auto', width='auto'))
 
 
 # Simulation parameters
@@ -40,6 +40,7 @@ def simulate_bifurcation(x0,v0,w,mu,A_range,n_A, dt,n_dt, pbar):
     pbar.value=A_range[0]
 
     # Loop over the amplitudes
+    print("Setting range to: ",A_range[0],A_range[1],n_A)
     for A in np.linspace(A_range[0],A_range[1],n_A):
         pbar.value=A
         c.set_platform_A(A)
@@ -56,7 +57,7 @@ def simulate_bifurcation(x0,v0,w,mu,A_range,n_A, dt,n_dt, pbar):
     fig, ax = plt.subplots(1,1,figsize=((GRID_WIDTH)/100*(2./3),(GRID_HEIGHT)/100*(7./9)), )
 
     for i in range(len(phi_arr)): 
-        ax.scatter(np.array(A_arr[i])*1e3,phi_arr[i],c='k',s=0.1)
+        ax.scatter(np.array(A_arr[i][10:])*1e3,phi_arr[i][10:],c='k',s=0.1)
 
     ax.set_title('Simulation of Phase Bifurcation')
     ax.set_ylabel('phase [periods]')
